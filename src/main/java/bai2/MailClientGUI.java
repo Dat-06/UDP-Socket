@@ -8,8 +8,7 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 
 public class MailClientGUI extends JFrame {
-    private JTextField txtServerIP, txtServerPort, txtUser, txtReceiver, txtTitle;
-    private JPasswordField txtPass;
+    private JTextField txtServerIP, txtServerPort, txtUser, txtPass, txtReceiver, txtTitle; // Đã đổi txtPass thành JTextField
     private JTextArea txtContent, txtEmailBody;
     private DefaultListModel<String> listModel;
     private JList<String> listEmails;
@@ -46,7 +45,7 @@ public class MailClientGUI extends JFrame {
         txtServerIP = new JTextField("100.92.122.114", 15);
         txtServerPort = new JTextField("5000", 15);
         txtUser = new JTextField(15);
-        txtPass = new JPasswordField(15);
+        txtPass = new JTextField(15); // Dùng JTextField để hiện rõ chữ, không che dấu chấm
 
         JButton btnLogin = new JButton("Đăng nhập");
         JButton btnRegister = new JButton("Đăng ký mới");
@@ -155,7 +154,7 @@ public class MailClientGUI extends JFrame {
     // XL Đăng nhập
     private void performLogin() {
         String user = txtUser.getText().trim();
-        String pass = new String(txtPass.getPassword()).trim();
+        String pass = txtPass.getText().trim(); // Lấy chữ từ JTextField bình thường
 
         if (user.isEmpty() || pass.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!");
@@ -176,7 +175,7 @@ public class MailClientGUI extends JFrame {
     // XL Đăng ký
     private void performRegister() {
         String user = txtUser.getText().trim();
-        String pass = new String(txtPass.getPassword()).trim();
+        String pass = txtPass.getText().trim(); // Lấy chữ từ JTextField bình thường
 
         if (user.isEmpty() || pass.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tài khoản và mật khẩu muốn tạo!");
@@ -189,7 +188,7 @@ public class MailClientGUI extends JFrame {
 
     // XL Tải lại danh sách
     private void refreshEmailList() {
-        String pass = new String(txtPass.getPassword()).trim();
+        String pass = txtPass.getText().trim();
         String res = sendUDPCommand("LOGIN " + currentUser + "#" + pass);
         if (res.startsWith("FILES:")) {
             updateEmailListFromResponse(res);
