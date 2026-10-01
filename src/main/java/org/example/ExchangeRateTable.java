@@ -6,8 +6,7 @@ import java.net.*;
 import java.net.*;
 
 public class ExchangeRateTable {
-    // Thay "127.0.0.1" thành IP thực tế của máy Server khi chạy 2 máy (VD: "192.168.1.15")
-    private static final String SERVER_IP = "127.0.0.1";
+    private static final String SERVER_IP = "100.92.122.114";
     private static final int SERVER_PORT = 2345;
 
     public static void main(String[] args) {

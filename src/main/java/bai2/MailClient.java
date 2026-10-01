@@ -4,8 +4,8 @@ import java.net.*;
 import java.util.Scanner;
 
 public class MailClient {
-    // Thay "127.0.0.1" thành IP thực tế của máy Server khi chạy 2 máy
-    private static final String SERVER_IP = "127.0.0.1";
+
+    private static final String SERVER_IP = "100.92.122.114";
     private static final int SERVER_PORT = 5000;
 
     public static void main(String[] args) {
