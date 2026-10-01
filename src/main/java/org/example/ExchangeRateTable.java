@@ -3,38 +3,47 @@ package org.example;
 import java.io.*;
 import java.net.*;
 
+import java.net.*;
+
 public class ExchangeRateTable {
-    private static final String SERVER_IP = "100.92.122.114";
+    // Thay "127.0.0.1" thành IP thực tế của máy Server khi chạy 2 máy (VD: "192.168.1.15")
+    private static final String SERVER_IP = "127.0.0.1";
     private static final int SERVER_PORT = 2345;
+
     public static void main(String[] args) {
-        System.out.println(">>> Exchange Rate Client dang ket noi toi Server: " + SERVER_IP);
+        System.out.println(">>> UDP Exchange Rate Client bắt đầu...");
         System.out.println("-------------------------------------------------------------------------------");
-        while (true) {
-            try (
-                    Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-            ) {
 
-                out.println("GET_RATES");
+        try (DatagramSocket clientSocket = new DatagramSocket()) {
+            clientSocket.setSoTimeout(2000); // Chờ tối đa 2s
+            InetAddress IPAddress = InetAddress.getByName(SERVER_IP);
 
-                String response = in.readLine();
-                if (response != null) {
+            while (true) {
+                try {
+                    String message = "GET_RATES";
+                    byte[] sendData = message.getBytes("UTF-8");
+
+                    // Gửi request UDP
+                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, SERVER_PORT);
+                    clientSocket.send(sendPacket);
+
+                    // Nhận response UDP
+                    byte[] receiveData = new byte[1024];
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    clientSocket.receive(receivePacket);
+
+                    String response = new String(receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8");
                     System.out.println(response);
+
+                } catch (SocketTimeoutException e) {
+                    System.err.println("Không nhận được phản hồi từ Server (Timeout).");
                 }
 
+                // Tạm dừng 1 giây
                 Thread.sleep(1000);
-
-            } catch (UnknownHostException e) {
-                System.err.println("Khong tim thấy Server IP: " + SERVER_IP);
-                break;
-            } catch (IOException e) {
-                System.err.println("Loi ket noi Server. Thu lai sau 1s...");
-                try { Thread.sleep(1000); } catch (InterruptedException ex) {}
-            } catch (InterruptedException e) {
-                System.out.println("Chuong trinh dung.");
-                break;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
