@@ -43,7 +43,7 @@ public class MailClientGUI extends JFrame {
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        txtServerIP = new JTextField("127.0.0.1", 15);
+        txtServerIP = new JTextField("100.92.122.114", 15);
         txtServerPort = new JTextField("5000", 15);
         txtUser = new JTextField(15);
         txtPass = new JPasswordField(15);
